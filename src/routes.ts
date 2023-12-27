@@ -1,4 +1,6 @@
 import { Router, Request, Response } from "express";
+import multer from "multer";
+import uploadConfig from "./config/multer";
 import { CreateUserController } from "./controllers/user/CreateUserController";
 import { AuthUserController } from "./controllers/user/AuthUserController";
 import { isAuthenticated } from "./middlewares/isAuthenticated";
@@ -8,9 +10,11 @@ import { CreateCategoryController } from "./controllers/category/CreateCategoryC
 import { EditCategoryController } from "./controllers/category/EditCategoryController";
 import { ListCategoryController } from "./controllers/category/ListCategoryController";
 import { RemoveCategoryController } from "./controllers/category/RemoveCategoryController";
-import multer from "multer";
-import uploadConfig from "./config/multer";
 import { CreateProductController } from "./controllers/product/CreateProductController";
+import { ListProductByCategoryController } from "./controllers/product/ListProductByCategoryController";
+import { ListProductsController } from "./controllers/product/ListProductsController";
+import { RemoveProductController } from "./controllers/product/RemoveProductController";
+import { SaleProductController } from "./controllers/sale/SaleProductController";
 
 const router = Router();
 
@@ -57,6 +61,35 @@ router.post(
 	isAuthenticated,
 	upload.single("file"),
 	new CreateProductController().handle
+);
+router.put(
+	"/product/edit",
+	isAuthenticated,
+	upload.single("file"),
+	new EditCategoryController().handle
+);
+router.get(
+	"/product/listByCategory",
+	isAuthenticated,
+	new ListProductByCategoryController().handle
+);
+router.get(
+	"/products/all",
+	isAuthenticated,
+	new ListProductsController().handle
+);
+router.get(
+	"/product/remove",
+	isAuthenticated,
+	new RemoveProductController().handle
+);
+
+// Sale Routes
+
+router.put(
+	"/sale/product",
+	isAuthenticated,
+	new SaleProductController().handle
 );
 
 export { router };
